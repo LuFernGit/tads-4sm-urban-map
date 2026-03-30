@@ -1,0 +1,21 @@
+# intellij
+.idea/
+*.iml
+
+# maven
+target/
+
+# vscode
+.vscode/
+
+# node
+node_modules/
+
+# expo
+.expo/
+
+# segurança
+.env
+
+# windows
+Thumbs.db
