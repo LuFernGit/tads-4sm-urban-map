@@ -1,7 +1,7 @@
-package br.com.senac.urbanmap.entity.usuario;
+package br.com.senac.urbanmap.entitys.usuario;
 
 
-import br.com.senac.urbanmap.entity.local.Local;
+import br.com.senac.urbanmap.entitys.local.Local;
 import jakarta.persistence.*;
 import lombok.*;
 

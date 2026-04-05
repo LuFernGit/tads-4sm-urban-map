@@ -1,4 +1,4 @@
-package br.com.senac.urbanmap.dto;
+package br.com.senac.urbanmap.dtos;
 
 import jakarta.validation.constraints.*;
 

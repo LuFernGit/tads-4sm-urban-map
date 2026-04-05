@@ -1,6 +1,6 @@
-package br.com.senac.urbanmap.dto;
+package br.com.senac.urbanmap.dtos;
 
-import br.com.senac.urbanmap.entity.usuario.Funcao;
+import br.com.senac.urbanmap.entitys.usuario.Funcao;
 
 public record UsuarioDetalhesDto(
         Long id, String nome,

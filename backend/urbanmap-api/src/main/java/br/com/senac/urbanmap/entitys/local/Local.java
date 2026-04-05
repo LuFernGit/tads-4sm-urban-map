@@ -1,4 +1,4 @@
-package br.com.senac.urbanmap.entity.local;
+package br.com.senac.urbanmap.entitys.local;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
