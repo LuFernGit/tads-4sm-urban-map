@@ -1,4 +1,4 @@
-package br.com.senac.urbanmap.entitys.usuario;
+package br.com.senac.urbanmap.entities.usuario;
 
 public enum Funcao {
     USUARIO("usuario"), ADMINISTRADOR("administrador");

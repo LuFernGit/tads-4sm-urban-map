@@ -1,7 +1,9 @@
 package br.com.senac.urbanmap.exception;
 
-import br.com.senac.urbanmap.dtos.ErroValidationDto;
+import br.com.senac.urbanmap.entities.dtos.ErroValidationDto;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,8 +27,22 @@ public class TratadorDeErro {
     }
 
     // as exceções dos services
-    @ExceptionHandler(ErroServiceException.class)
-    public ResponseEntity<String> tratarErrosService(ErroServiceException e) {
+    @ExceptionHandler(ErroUsuarioServiceException.class)
+    public ResponseEntity<String> tratarErrosService(ErroUsuarioServiceException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+
+    // usuario não encontrado no momento do login
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<String> tratarUsuarioNaoEncontrado(UsernameNotFoundException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+
+    // erro relacionado a criação de token
+    @ExceptionHandler(JWTCreationException.class)
+    public ResponseEntity<String> tratarMensagemToken(JWTCreationException e) {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
