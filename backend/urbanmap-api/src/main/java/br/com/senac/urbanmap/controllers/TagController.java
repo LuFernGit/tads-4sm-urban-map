@@ -27,18 +27,27 @@ public class TagController {
 
     @PostMapping()
     public ResponseEntity<Tag> cadastrar(@RequestBody @Valid TagCadastroDTO dto) {
+        if (this.tagService.nomeCadastrado(dto.nome()))
+            return ResponseEntity.badRequest().build();
+
         Tag tag = this.tagService.cadastrar(dto);
         return ResponseEntity.created(URI.create("/tag/" + tag.getId())).body(tag);
     }
 
     @PutMapping()
     public ResponseEntity<Tag> alterar(@RequestBody Tag tag) {
+        if (!this.tagService.jaCadastrado(tag.getId()))
+            return ResponseEntity.notFound().build();
+
         tag = this.tagService.alterar(tag);
         return ResponseEntity.ok(tag);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity excluir(@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        if (!this.tagService.jaCadastrado(id))
+            return ResponseEntity.notFound().build();
+
         this.tagService.excluir(id);
         return ResponseEntity.noContent().build();
     }

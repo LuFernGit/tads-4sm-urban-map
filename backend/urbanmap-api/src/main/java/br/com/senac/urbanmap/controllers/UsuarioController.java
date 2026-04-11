@@ -14,28 +14,35 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping()
 @CrossOrigin(origins = "*")
 public class UsuarioController {
 
-    private final UsuarioService service;
+    private final UsuarioService usuarioService;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
 
     public UsuarioController(UsuarioService service, AuthenticationManager authenticationManager, TokenService tokenService) {
-        this.service = service;
+        this.usuarioService = service;
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
     }
 
+    @GetMapping("/usuarios")
+    public ResponseEntity<List<UsuarioDetalhesDTO>> buscaTodos() {
+        return ResponseEntity.ok(this.usuarioService.buscarTodos());
+    }
+
+
     @PostMapping("/cadastro")
     public ResponseEntity<UsuarioAutenticadoDTO> cadastro(@Valid @RequestBody UsuarioDadosCadastroDTO dto) {
-        Usuario usuario = service.cadastrar(dto);
+        Usuario usuario = usuarioService.cadastrar(dto);
         UsuarioDetalhesDTO usuarioDetalhesDTO = UsuarioDetalhesDTO.converterParaDTO(usuario);
         UsuarioAutenticadoDTO usuarioAutenticado = new UsuarioAutenticadoDTO(tokenService.geradorDeToken(usuario), usuarioDetalhesDTO);
-        return ResponseEntity.created(URI.create("/usuario/" + usuarioAutenticado.usuarioDetalhes().id())).body(usuarioAutenticado);
+        return ResponseEntity.created(URI.create("/usuario/" + usuarioAutenticado.usuario().id())).body(usuarioAutenticado);
     }
 
     @PostMapping("/login")

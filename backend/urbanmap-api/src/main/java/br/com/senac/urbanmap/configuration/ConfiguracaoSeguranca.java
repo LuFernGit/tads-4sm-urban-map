@@ -31,6 +31,7 @@ public class ConfiguracaoSeguranca {
         return httpSecurity.csrf(csrf -> csrf.disable()).
                 sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 authorizeHttpRequests(authorize -> authorize.
+                        requestMatchers(HttpMethod.GET, "/usuarios").hasRole(ADMIN).
                         requestMatchers(HttpMethod.POST, "/cadastro").permitAll().
                         requestMatchers(HttpMethod.POST, "/login").permitAll().
                         requestMatchers(HttpMethod.GET, "/tag").hasAnyRole(ADMIN, "USER").

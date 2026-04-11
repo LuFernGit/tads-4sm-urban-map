@@ -34,5 +34,13 @@ public class TagService {
         this.tagRepository.deleteById(id);
     }
 
+    public boolean jaCadastrado(Long id) {
+        return this.tagRepository.existsById(id);
+    }
+
+    public boolean nomeCadastrado(String nome){
+        return this.tagRepository.existsByNome(nome);
+    }
+
 
 }
