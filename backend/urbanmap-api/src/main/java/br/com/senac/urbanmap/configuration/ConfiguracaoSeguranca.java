@@ -1,6 +1,5 @@
 package br.com.senac.urbanmap.configuration;
 
-
 import br.com.senac.urbanmap.security.SecurityFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,26 +18,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class ConfiguracaoSeguranca {
     private static final String ADMIN = "ADMIN";
+    private static final String USER = "USER";
     private final SecurityFilter securityFilter;
 
     public ConfiguracaoSeguranca(SecurityFilter securityFilter) {
         this.securityFilter = securityFilter;
     }
 
-    // configuracao das rotas
+    // para acessar as fotos: http://localhost:5050/uploads/subpasta(usuarios/locais)/nome da foto.extensão
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(csrf -> csrf.disable()).
-                sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
-                authorizeHttpRequests(authorize -> authorize.
-                        requestMatchers(HttpMethod.GET, "/usuarios").hasRole(ADMIN).
-                        requestMatchers(HttpMethod.POST, "/cadastro").permitAll().
-                        requestMatchers(HttpMethod.POST, "/login").permitAll().
-                        requestMatchers(HttpMethod.GET, "/tag").hasAnyRole(ADMIN, "USER").
-                        requestMatchers(HttpMethod.POST, "/tag").hasRole(ADMIN).
-                        requestMatchers(HttpMethod.PUT, "/tag").hasRole(ADMIN).
-                        requestMatchers(HttpMethod.DELETE, "/tag/**").hasRole(ADMIN).
-                        anyRequest().authenticated()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+        return httpSecurity
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(HttpMethod.POST, "/cadastro", "/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/usuarios").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/tag").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/tag").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/tag/**").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/usuario/*/foto").hasAnyRole(USER, ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/tag").hasAnyRole(USER, ADMIN)
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -47,10 +52,8 @@ public class ConfiguracaoSeguranca {
         return configuration.getAuthenticationManager();
     }
 
-    // faz a criptografia da senha do usuario
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

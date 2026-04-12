@@ -27,9 +27,13 @@ public class Usuario implements UserDetails {
     @Column(name = "nome", length = 100, nullable = false)
     private @Getter String nome;
 
-    @Column(name = "nome_usuario", length = 100, nullable = false)
+    @Column(name = "nome_usuario", length = 100, unique = true, nullable = false)
     private @Getter
     @Setter String nomeUsuario;
+
+    @Column(name = "imagem_url")
+    private @Getter
+    @Setter String imagemUrl;
 
     @Column(name = "data_nascimento", nullable = false)
     private @Getter LocalDate dataNascimento;
@@ -48,6 +52,10 @@ public class Usuario implements UserDetails {
     @ManyToMany
     @JoinTable(name = "locais_favoritos")
     private @Getter Set<Local> locaisFavoritos;
+
+    @ManyToMany
+    @JoinTable
+    private @Getter Set<Local> locaisSalvos;
 
     @Column(name = "telefone", length = 15, nullable = false)
     private @Getter

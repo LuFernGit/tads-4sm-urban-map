@@ -12,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping()
@@ -52,6 +54,16 @@ public class UsuarioController {
         Usuario usuario = (Usuario) auth.getPrincipal();
         UsuarioDetalhesDTO usuarioDetalhesDTO = UsuarioDetalhesDTO.converterParaDTO(usuario);
         return ResponseEntity.ok(new UsuarioAutenticadoDTO(tokenService.geradorDeToken(usuario), usuarioDetalhesDTO));
+    }
+
+    @PutMapping("/usuario/{id}/foto") // O ID vai na URL
+    public ResponseEntity<UsuarioDetalhesDTO> atualizarFoto(@PathVariable Long id, @RequestParam("foto") MultipartFile foto) {
+        Optional<Usuario> opt = this.usuarioService.findById(id);
+        if (opt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Usuario usuario = this.usuarioService.atualizarImagem(opt.get(), foto);
+        return ResponseEntity.ok(UsuarioDetalhesDTO.converterParaDTO(usuario));
     }
 
 }

@@ -21,14 +21,14 @@ public class ConfiguracaoBancoDados {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // usuário padrão
+    // admin chumbado
     @Bean
     CommandLineRunner configuracaoInicial() {
         return args -> {
             if (usuarioRepo.count() == 0) {
                 Usuario admin = Usuario.builder().nome("Administrador").
-                        nomeUsuario("Admin").dataNascimento(LocalDate.now()).email("admin.urbanmap@gmail.com").
-                            senha(passwordEncoder.encode("admin1234")).funcao(Funcao.ADMINISTRADOR).telefone("119999999999").build();
+                        nomeUsuario("Admin").imagemUrl("usuarios/padrao.png").dataNascimento(LocalDate.now()).email("admin.urbanmap@gmail.com").
+                        senha(passwordEncoder.encode("admin1234")).funcao(Funcao.ADMINISTRADOR).telefone("119999999999").build();
                 usuarioRepo.save(admin);
             }
         };

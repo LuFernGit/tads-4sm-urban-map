@@ -10,6 +10,7 @@ public record UsuarioDetalhesDTO(
         Long id,
         String nome,
         String nomeUsuario,
+        String imagemUrl,
         String email,
         String telefone,
         Funcao funcao
@@ -19,6 +20,7 @@ public record UsuarioDetalhesDTO(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getNomeUsuario(),
+                usuario.getImagemUrl(),
                 usuario.getEmail(),
                 usuario.getTelefone(),
                 usuario.getFuncao());
