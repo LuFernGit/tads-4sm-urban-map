@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/locais")
@@ -27,9 +28,10 @@ public class LocalController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<LocalCriadoDTO> cadastrar(
-            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)) @RequestPart("local") @Valid LocalCadastroDTO dto,
-            @RequestPart("arquivo") MultipartFile arquivo) {
-        Local local = this.localService.cadastrar(dto, arquivo);
+            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+            @RequestPart("local") @Valid LocalCadastroDTO dto,
+            @RequestPart(value = "arquivos", required = false) List<MultipartFile> arquivos) {
+        Local local = this.localService.cadastrar(dto, arquivos);
         return ResponseEntity.created(URI.create("/locais/" + local.getId())).body(LocalCriadoDTO.converterParaDto(local));
     }
 }

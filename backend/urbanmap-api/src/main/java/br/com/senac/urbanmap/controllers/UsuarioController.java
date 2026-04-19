@@ -41,7 +41,9 @@ public class UsuarioController {
     @PostMapping("/cadastro")
     public ResponseEntity<UsuarioRespostaDTO> cadastro(@Valid @RequestBody UsuarioCadastroDTO dto) {
         Usuario usuario = usuarioService.cadastrar(dto);
+
         UsuarioRespostaDTO usuarioRespostaDTO = UsuarioRespostaDTO.converterParaDTO(usuario, tokenService.geradorDeToken(usuario));
+
         return ResponseEntity.created(URI.create("/usuario/" + usuarioRespostaDTO.id())).body(usuarioRespostaDTO);
     }
 

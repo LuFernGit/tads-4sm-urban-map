@@ -14,5 +14,15 @@ public class Tag {
     private @Getter Long id;
 
     @Column(name = "nome", unique = true, nullable = false)
-    private @Setter @Getter String nome;
+    private @Setter
+    @Getter String nome;
+
+    @Column(name = "categoria")
+    private @Getter
+    @Setter
+    String categoria;
+
+    @Column(name = "cor")
+    private @Getter
+    @Setter String cor;
 }

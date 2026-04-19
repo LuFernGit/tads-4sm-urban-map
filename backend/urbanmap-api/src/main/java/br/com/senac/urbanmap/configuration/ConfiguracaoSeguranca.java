@@ -36,7 +36,7 @@ public class ConfiguracaoSeguranca {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/locais/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/cadastro", "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuarios/cadastro", "/usuarios/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuarios").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.POST, "/tag").hasRole(ADMIN)

@@ -27,36 +27,32 @@ public class UsuarioService {
     }
 
 
-//    public List<UsuarioRespostaDTO> buscarTodos() {
-//        return UsuarioRespostaDTO.converterListaParaDTO(this.usuarioRepo.findAll());
-//    }
-
-
     public Usuario cadastrar(UsuarioCadastroDTO dto) throws ErroUsuarioServiceException {
-        if (emailCadastrado(dto))
+        if (emailCadastrado(dto)) {
             throw new ErroUsuarioServiceException("E-mail já está cadastrado.");
-
+        }
         if (nomeUsuarioCadastrado(dto)) {
             throw new ErroUsuarioServiceException("Nome de usuário indisponível");
         }
-
-        if (!idadeValida(dto))
+        if (!idadeValida(dto)) {
             throw new ErroUsuarioServiceException("Cadastro autorizado somente para pessoas com no minimo 16 anos.");
-
+        }
         Usuario usuario = UsuarioCadastroDTO.converterParaUsuario(dto, passwordEncoder);
-
-        usuario.setImagemUrl(FOTO_PADRAO);
-
+        usuario.setFotoUrl(FOTO_PADRAO);
         usuario = usuarioRepo.save(usuario);
         return usuario;
     }
 
     public Usuario atualizarImagem(Usuario usuario, MultipartFile foto) {
         String url = this.imagemService.salvarImagem(foto, "usuarios");
-        if (!usuario.getImagemUrl().equals(FOTO_PADRAO))
-            this.imagemService.excluirImagem(usuario.getImagemUrl());
-        usuario.setImagemUrl(url);
+        if (!usuario.getFotoUrl().equals(FOTO_PADRAO))
+            this.imagemService.excluirImagem(usuario.getFotoUrl());
+        usuario.setFotoUrl(url);
         return this.usuarioRepo.save(usuario);
+    }
+
+    public void estatistica() {
+
     }
 
     // Auxiliares

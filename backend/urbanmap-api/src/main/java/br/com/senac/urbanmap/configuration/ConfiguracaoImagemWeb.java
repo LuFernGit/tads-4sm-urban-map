@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Configuration
-public class ConfiguracaoWeb implements WebMvcConfigurer {
+public class ConfiguracaoImagemWeb implements WebMvcConfigurer {
 
     @Value("${urbanmap.upload.dir-imagens}")
     private String diretorioImagens;

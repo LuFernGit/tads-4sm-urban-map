@@ -21,7 +21,7 @@ public record UsuarioRespostaDTO(
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getNomeUsuario(),
-                usuario.getImagemUrl(),
+                usuario.getFotoUrl(),
                 usuario.getEmail(),
                 usuario.getTelefone(),
                 usuario.getFuncao().getTipo(),

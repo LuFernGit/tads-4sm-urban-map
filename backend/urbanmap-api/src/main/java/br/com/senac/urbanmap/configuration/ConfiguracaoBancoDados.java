@@ -26,9 +26,17 @@ public class ConfiguracaoBancoDados {
     CommandLineRunner configuracaoInicial() {
         return args -> {
             if (usuarioRepo.count() == 0) {
-                Usuario admin = Usuario.builder().nome("Administrador").
-                        nomeUsuario("Admin").imagemUrl("usuarios/padrao.png").dataNascimento(LocalDate.now()).email("admin.urbanmap@gmail.com").
-                        senha(passwordEncoder.encode("admin1234")).funcao(Funcao.ADMINISTRADOR).telefone("119999999999").build();
+                Usuario admin = Usuario.builder()
+                        .nome("Administrador")
+                        .nomeUsuario("Admin")
+                        .fotoUrl("usuarios/padrao.png")
+                        .dataNascimento(LocalDate.now())
+                        .email("admin.urbanmap@gmail.com")
+                        .senha(passwordEncoder.encode("admin1234"))
+                        .funcao(Funcao.ADMINISTRADOR)
+                        .telefone("119999999999")
+                        .status(true)
+                        .build();
                 usuarioRepo.save(admin);
             }
         };

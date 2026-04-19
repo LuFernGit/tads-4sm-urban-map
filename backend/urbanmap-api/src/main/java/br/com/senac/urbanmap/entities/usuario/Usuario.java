@@ -9,10 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,19 +21,16 @@ public class Usuario implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private @Getter Long id;
 
-    @Column(name = "nome", length = 100, nullable = false)
+    @Column(name = "nome", nullable = false)
     private @Getter String nome;
 
-    @Column(name = "nome_usuario", length = 100, unique = true, nullable = false)
+    @Column(name = "nome_usuario", unique = true, nullable = false)
     private @Getter
     @Setter String nomeUsuario;
 
-    @Column(name = "imagem_url")
+    @Column(name = "foto_url")
     private @Getter
-    @Setter String imagemUrl;
-
-    @Column(name = "data_nascimento", nullable = false)
-    private @Getter LocalDate dataNascimento;
+    @Setter String fotoUrl;
 
     @Column(name = "email", unique = true, nullable = false)
     private @Getter String email;
@@ -45,21 +39,28 @@ public class Usuario implements UserDetails {
     private @Getter
     @Setter String senha;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "funcao", length = 13, nullable = false)
-    private @Getter Funcao funcao;
-
-    @ManyToMany
-    @JoinTable(name = "locais_favoritos")
-    private @Getter Set<Local> locaisFavoritos;
-
-    @ManyToMany
-    @JoinTable(name = "locais_salvos")
-    private @Getter Set<Local> locaisSalvos;
-
     @Column(name = "telefone", length = 15, nullable = false)
     private @Getter
     @Setter String telefone;
+
+    @Column(name = "data_nascimento", nullable = false)
+    private @Getter LocalDate dataNascimento;
+
+    @ManyToMany
+    @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "local_id"))
+    private @Getter Set<Local> likes = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "salvos", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "local_id"))
+    private @Getter Set<Local> salvos = new HashSet<>();
+
+    @Column(name = "usuario_status")
+    private @Getter
+    @Setter Boolean status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "funcao", length = 13, nullable = false)
+    private @Getter Funcao funcao;
 
     @Override
     public boolean equals(Object o) {
