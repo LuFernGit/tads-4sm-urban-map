@@ -1,11 +1,17 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function TelaLogin({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/logo.png')}
+        source={require("../assets/logo.png")}
         style={styles.logo}
         resizeMode="contain"
       />
@@ -27,18 +33,18 @@ export default function TelaLogin({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => alert('Fazendo login...')}
+        onPress={() => alert("Fazendo login...")}
       >
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate('Cadastro')}
+        onPress={() => navigation.navigate("Cadastro")}
         style={styles.footer}
       >
         <Text>
-          Não tem uma conta?{' '}
-          <Text style={{ color: 'blue', fontWeight: 'bold' }}>
+          Não tem uma conta?{" "}
+          <Text style={{ color: "blue", fontWeight: "bold" }}>
             Cadastre-se agora.
           </Text>
         </Text>
@@ -50,8 +56,8 @@ export default function TelaLogin({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#dff3ff',
-    alignItems: 'center',
+    backgroundColor: "#dff3ff",
+    alignItems: "center",
     paddingTop: 80,
   },
   logo: {
@@ -61,30 +67,30 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 30,
-    color: '#1e232c',
+    color: "#1e232c",
   },
   input: {
-    width: '80%',
-    backgroundColor: '#f8f8f8',
+    width: "80%",
+    backgroundColor: "#f8f8f8",
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
     borderWidth: 1,
-    borderColor: '#e8ecf4',
+    borderColor: "#e8ecf4",
   },
   button: {
-    width: '80%',
-    backgroundColor: '#1e232c',
+    width: "80%",
+    backgroundColor: "#1e232c",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 10,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   footer: {
     marginTop: 40,

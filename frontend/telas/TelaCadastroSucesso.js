@@ -1,11 +1,10 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function TelaCadastroSucesso({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/sucesso.png')}
+        source={require("../assets/sucesso.png")}
         style={styles.imagemSucesso}
         resizeMode="contain"
       />
@@ -17,7 +16,7 @@ export default function TelaCadastroSucesso({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Login')}
+        onPress={() => navigation.navigate("Login")}
       >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -28,9 +27,9 @@ export default function TelaCadastroSucesso({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#dff3ff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#dff3ff",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 25,
   },
   imagemSucesso: {
@@ -40,26 +39,26 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1e232c',
+    fontWeight: "bold",
+    color: "#1e232c",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#444',
-    textAlign: 'center',
+    color: "#444",
+    textAlign: "center",
     marginBottom: 30,
   },
   button: {
-    width: '100%',
-    backgroundColor: '#1e232c',
+    width: "100%",
+    backgroundColor: "#1e232c",
     padding: 16,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 16,
   },
 });

@@ -1,33 +1,29 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function TelaInicial({ navigation }) {
   return (
     <View style={styles.container}>
-      
       <Image
-        source={require('../assets/logo.png')}
+        source={require("../assets/logo.png")}
         style={styles.logo}
         resizeMode="contain"
       />
 
       <View style={styles.buttonsContainer}>
-        
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.loginButton}
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.navigate("Login")}
         >
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.registerButton}
-          onPress={() => navigation.navigate('Cadastro')}
+          onPress={() => navigation.navigate("Cadastro")}
         >
           <Text style={styles.registerText}>Cadastre-se</Text>
         </TouchableOpacity>
-
       </View>
-
     </View>
   );
 }
@@ -35,9 +31,9 @@ export default function TelaInicial({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#dff3ff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#dff3ff",
+    justifyContent: "center",
+    alignItems: "center",
   },
   logo: {
     width: 250,
@@ -45,27 +41,27 @@ const styles = StyleSheet.create({
     marginBottom: 80,
   },
   buttonsContainer: {
-    width: '80%',
+    width: "80%",
   },
   loginButton: {
-    backgroundColor: '#1e232c',
+    backgroundColor: "#1e232c",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 15,
   },
   loginText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
   registerButton: {
-    backgroundColor: '#f8f8f8',
+    backgroundColor: "#f8f8f8",
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
+    alignItems: "center",
   },
   registerText: {
-    color: '#000',
+    color: "#000",
     fontSize: 16,
   },
 });

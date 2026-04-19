@@ -1,180 +1,68 @@
-import { Feather, Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function TelaPesquisa() {
   const [curtido, setCurtido] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView>
         <View style={styles.header}>
-          <Image
-            source={require('../assets/logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+          <Image source={require("../assets/logo.png")} style={styles.logo} />
         </View>
 
         <View style={styles.searchRow}>
           <View style={styles.searchBox}>
             <Ionicons name="search" size={18} color="#888" />
-            <TextInput
-              value="Japan House"
-              placeholder="Buscar"
-              placeholderTextColor="#888"
-              style={styles.input}
-            />
-            <Ionicons name="close-circle" size={18} color="#999" />
+            <TextInput value="Japan House" style={styles.input} />
           </View>
 
-          <TouchableOpacity>
-            <Feather name="sliders" size={20} color="#333" />
+          <TouchableOpacity onPress={() => navigation.navigate("Filtro")}>
+            <Feather name="sliders" size={20} />
           </TouchableOpacity>
         </View>
 
         <Text style={styles.locationTitle}>Japan House</Text>
 
         <Image
-          source={require('../assets/JapanHouse.png')}
+          source={require("../assets/JapanHouse.png")}
           style={styles.mainImage}
         />
 
-        <View style={styles.actionsRow}>
-          <View style={styles.leftActions}>
-            <TouchableOpacity onPress={() => setCurtido(!curtido)}>
-              <Image
-                source={
-                  curtido
-                    ? require('../assets/BotaoLikeFilled.png')
-                    : require('../assets/BotaoLike.png')
-                }
-                style={styles.icon}
-              />
-            </TouchableOpacity>
-
-            <Image
-              source={require('../assets/BotaoComentario.png')}
-              style={styles.icon}
-            />
-
-            <Image
-              source={require('../assets/BotaoGoogleMaps.png')}
-              style={styles.icon}
-            />
-          </View>
-
+        <TouchableOpacity onPress={() => setCurtido(!curtido)}>
           <Image
-            source={require('../assets/BotaoSalvo.png')}
+            source={
+              curtido
+                ? require("../assets/BotaoLikeFilled.png")
+                : require("../assets/BotaoLike.png")
+            }
             style={styles.icon}
           />
-        </View>
-
-        <Text style={styles.likes}>
-          Curtido por EvagelyAssuncao e outras 13 pessoas
-        </Text>
-        <Text style={styles.tags}>
-          #PasseioEmFamilia #Imperdivel #PasseioCultural #EspacoFechado
-        </Text>
+        </TouchableOpacity>
       </ScrollView>
-
-      <View style={styles.bottomNav}>
-        <Ionicons name="home-outline" size={24} color="#111" />
-        <Ionicons name="heart-outline" size={24} color="#111" />
-        <Ionicons name="bookmark-outline" size={24} color="#111" />
-        <Ionicons name="person-circle-outline" size={24} color="#111" />
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    paddingTop: 50,
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-  },
-  logo: {
-    width: 110,
-    height: 50,
-  },
-  searchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    marginBottom: 20,
-  },
-  searchBox: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    marginRight: 12,
-    height: 42,
-  },
-  input: {
-    flex: 1,
-    marginLeft: 8,
-  },
-  locationTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginHorizontal: 16,
-    marginBottom: 10,
-  },
-  mainImage: {
-    width: '100%',
-    height: 380,
-  },
-  actionsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  leftActions: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  likes: {
-    marginHorizontal: 16,
-    fontSize: 13,
-    marginBottom: 4,
-  },
-  tags: {
-    marginHorizontal: 16,
-    fontSize: 13,
-    marginBottom: 20,
-    color: '#222',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 14,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  icon: {
-    width: 24,
-    height: 24,
-    resizeMode: 'contain',
-  },
+  container: { flex: 1, backgroundColor: "#fff" },
+  header: { paddingTop: 50, paddingHorizontal: 20 },
+  logo: { width: 110, height: 50 },
+  searchRow: { flexDirection: "row", padding: 16 },
+  searchBox: { flex: 1, flexDirection: "row" },
+  input: { flex: 1 },
+  locationTitle: { margin: 16 },
+  mainImage: { width: "100%", height: 300 },
+  icon: { width: 24, height: 24 },
 });
