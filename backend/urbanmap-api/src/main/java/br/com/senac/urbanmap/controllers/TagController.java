@@ -1,6 +1,7 @@
 package br.com.senac.urbanmap.controllers;
 
 import br.com.senac.urbanmap.controllers.dtos.TagCadastroDTO;
+import br.com.senac.urbanmap.controllers.dtos.TagRespostaDTO;
 import br.com.senac.urbanmap.entities.tag.Tag;
 import br.com.senac.urbanmap.services.TagService;
 import jakarta.validation.Valid;
@@ -11,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("tag")
+@RequestMapping("/tag")
 @CrossOrigin(origins = "*")
 public class TagController {
 
@@ -21,27 +22,25 @@ public class TagController {
         this.tagService = tagService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<Tag>> buscar() {
-        return ResponseEntity.ok(this.tagService.buscar());
+    @GetMapping("/todas")
+    public ResponseEntity<List<TagRespostaDTO>> buscar() {
+        return ResponseEntity.ok(TagRespostaDTO.converterParaListDTO(this.tagService.buscar()));
     }
 
     @PostMapping()
-    public ResponseEntity<Tag> cadastrar(@RequestBody @Valid TagCadastroDTO dto) {
+    public ResponseEntity<TagRespostaDTO> cadastrar(@RequestBody @Valid TagCadastroDTO dto) {
         if (this.tagService.nomeCadastrado(dto.nome()))
             return ResponseEntity.badRequest().build();
-
-        Tag tag = this.tagService.cadastrar(dto);
-        return ResponseEntity.created(URI.create("/tag/" + tag.getId())).body(tag);
+        TagRespostaDTO respostaDTO = TagRespostaDTO.converterParaDTO(this.tagService.cadastrar(dto));
+        return ResponseEntity.created(URI.create("/tag/" + respostaDTO.id())).body(respostaDTO);
     }
 
     @PutMapping()
-    public ResponseEntity<Tag> alterar(@RequestBody Tag tag) {
+    public ResponseEntity<TagRespostaDTO> alterar(@RequestBody Tag tag) {
         if (!this.tagService.jaCadastrado(tag.getId()))
             return ResponseEntity.notFound().build();
-
-        tag = this.tagService.alterar(tag);
-        return ResponseEntity.ok(tag);
+        TagRespostaDTO respostaDTO = TagRespostaDTO.converterParaDTO(this.tagService.alterar(tag));
+        return ResponseEntity.ok(respostaDTO);
     }
 
     @DeleteMapping("/{id}")

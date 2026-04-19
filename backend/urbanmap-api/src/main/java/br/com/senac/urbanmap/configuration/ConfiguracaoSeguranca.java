@@ -43,7 +43,7 @@ public class ConfiguracaoSeguranca {
                         .requestMatchers(HttpMethod.PUT, "/tag").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.DELETE, "/tag/**").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/usuario/*/foto").hasAnyRole(USER, ADMIN)
-                        .requestMatchers(HttpMethod.GET, "/tag").hasAnyRole(USER, ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/tag/todas").hasAnyRole(USER, ADMIN)
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

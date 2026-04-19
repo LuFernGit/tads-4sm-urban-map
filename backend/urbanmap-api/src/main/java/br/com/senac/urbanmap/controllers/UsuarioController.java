@@ -32,12 +32,6 @@ public class UsuarioController {
         this.tokenService = tokenService;
     }
 
-//    @GetMapping("/usuarios")
-//    public ResponseEntity<List<UsuarioRespostaDTO>> buscarTodos() {
-//        return ResponseEntity.ok(this.usuarioService.buscarTodos());
-//    }
-
-
     @PostMapping("/cadastro")
     public ResponseEntity<UsuarioRespostaDTO> cadastro(@Valid @RequestBody UsuarioCadastroDTO dto) {
         Usuario usuario = usuarioService.cadastrar(dto);
@@ -53,7 +47,9 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioRespostaDTO.converterParaDTO(usuario, tokenService.geradorDeToken(usuario)));
     }
 
-    @PutMapping("/usuario/{id}/foto") // O ID vai na URL
+    // @PutMapping()
+
+    @PutMapping("/usuario/{id}/foto")
     public ResponseEntity<UsuarioRespostaDTO> atualizarFoto(@PathVariable Long id, @RequestParam("foto") MultipartFile foto) {
         Optional<Usuario> opt = this.usuarioService.findById(id);
         if (opt.isEmpty()) {
