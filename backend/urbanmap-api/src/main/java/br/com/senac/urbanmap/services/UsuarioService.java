@@ -1,5 +1,6 @@
 package br.com.senac.urbanmap.services;
 
+import br.com.senac.urbanmap.controllers.dtos.UsuarioAlteracaoDTO;
 import br.com.senac.urbanmap.entities.local.Local;
 import br.com.senac.urbanmap.entities.usuario.Usuario;
 import br.com.senac.urbanmap.controllers.dtos.UsuarioCadastroDTO;
@@ -153,9 +154,24 @@ public class UsuarioService {
         return this.usuarioRepository.save(usuario);
     }
 
-//    public void estatistica() {
-//
-//    }
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Usuario atualizarInformacoes(UsuarioAlteracaoDTO dto, MultipartFile foto) {
+        Optional<Usuario> opt = this.usuarioRepository.findById(dto.id());
+        if (opt.isEmpty()) throw new ErroUsuarioServiceException("Usuario não encontrado");
+        Usuario u = opt.get();
+        u.setNome(dto.nome());
+        u.setNomeUsuario(dto.nomeUsuario());
+        u.setTelefone(dto.telefone());
+        if (foto != null && !foto.isEmpty()) {
+            if (!u.getFotoUrl().equals(FOTO_PADRAO)) {
+                this.imagemService.excluirImagem(u.getFotoUrl());
+            }
+            String url = this.imagemService.salvarImagem(foto, "usuarios");
+            u.setFotoUrl(url);
+        }
+        this.usuarioRepository.save(u);
+        return u;
+    }
 
 
     private boolean idadeValida(UsuarioCadastroDTO dto) {

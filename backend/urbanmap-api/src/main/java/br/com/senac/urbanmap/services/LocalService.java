@@ -32,6 +32,15 @@ public class LocalService {
         return this.localRepository.findAll();
     }
 
+    public List<Local> buscarPorParametros(String nome, Set<Long> idTags) {
+        Set<Long> ids = (idTags != null) ? idTags : new HashSet<>();
+        if ((nome == null || nome.isBlank()) && ids.isEmpty()) {
+            return this.localRepository.findAll();
+        }
+        Set<Tag> tags = new HashSet<>(this.tagRepository.findAllById(ids));
+        return this.localRepository.findDistinctByNomeContainingIgnoreCaseOrTagsIn(nome, tags);
+    }
+
     public Local buscarLocal(Long idLocal) {
         Optional<Local> opt = this.localRepository.findById(idLocal);
         if (opt.isEmpty()) throw new ErroLocalServiceException("Local não encontrado");
@@ -63,6 +72,9 @@ public class LocalService {
         l.setCidade(dto.cidade());
         l.setEstado(dto.estado());
         l.setCep(dto.cep());
+        if (!dto.urls().isEmpty() || (arquivos != null && !arquivos.isEmpty())) {
+            l.getFotosUrl().forEach(foto -> this.imagemService.excluirImagem(foto));
+        }
         if (!dto.urls().isEmpty()) {
             l.setFotosUrl(dto.urls());
         } else if (!arquivos.isEmpty()) {
@@ -74,6 +86,7 @@ public class LocalService {
         }
         Set<Tag> tags = new HashSet<>(this.tagRepository.findAllById(dto.tagsId()));
         l.setTags(tags);
+        this.localRepository.save(l);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

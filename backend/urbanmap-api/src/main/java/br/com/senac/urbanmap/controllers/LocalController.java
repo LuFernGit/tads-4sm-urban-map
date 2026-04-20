@@ -5,7 +5,6 @@ import br.com.senac.urbanmap.controllers.dtos.LocalCadastroDTO;
 import br.com.senac.urbanmap.controllers.dtos.LocalPadraoDTO;
 import br.com.senac.urbanmap.controllers.dtos.LocalListaReduzidaDTO;
 import br.com.senac.urbanmap.entities.local.Local;
-import br.com.senac.urbanmap.entities.tag.Tag;
 import br.com.senac.urbanmap.services.LocalService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,12 +35,14 @@ public class LocalController {
     }
 
     // nome ou tags
-    @GetMapping("/buscar/{nome}")
-    public ResponseEntity<List<LocalListaReduzidaDTO>> buscarPorParametro(@PathVariable("nome") String nome, @RequestBody Set<Tag> tags) {
-        return null;
+    @GetMapping("/buscar")
+    public ResponseEntity<List<LocalListaReduzidaDTO>> buscarPorParametro(
+            @RequestParam(value = "nome", required = false) String nome,
+            @RequestParam(value = "idTags", required = false) Set<Long> idTags) {
+        return ResponseEntity.ok(LocalListaReduzidaDTO.converterParaListaDTO(this.localService.buscarPorParametros(nome, idTags)));
     }
 
-    @GetMapping("/buscar/{idlocal}")
+    @GetMapping("/buscar/{idLocal}")
     public ResponseEntity<LocalPadraoDTO> buscarLocal(@PathVariable("idLocal") Long idLocal) {
         return ResponseEntity.ok(LocalPadraoDTO.converterParaDto(this.localService.buscarLocal(idLocal)));
     }

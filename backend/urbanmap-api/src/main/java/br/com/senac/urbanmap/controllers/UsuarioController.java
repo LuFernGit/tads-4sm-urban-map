@@ -1,12 +1,16 @@
 package br.com.senac.urbanmap.controllers;
 
+import br.com.senac.urbanmap.controllers.dtos.UsuarioAlteracaoDTO;
 import br.com.senac.urbanmap.controllers.dtos.UsuarioRespostaDTO;
 import br.com.senac.urbanmap.controllers.dtos.UsuarioLoginDTO;
 import br.com.senac.urbanmap.controllers.dtos.UsuarioCadastroDTO;
 import br.com.senac.urbanmap.entities.usuario.Usuario;
 import br.com.senac.urbanmap.services.TokenService;
 import br.com.senac.urbanmap.services.UsuarioService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -73,13 +77,25 @@ public class UsuarioController {
 
 
     @PutMapping("/usuario/{id}/foto")
-    public ResponseEntity<UsuarioRespostaDTO> atualizarFoto(@PathVariable Long id, @RequestParam("foto") MultipartFile foto) {
+    public ResponseEntity<UsuarioRespostaDTO> atualizarFoto(
+            @PathVariable Long id,
+            @Parameter(content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+            @RequestPart("foto") MultipartFile foto) {
         Optional<Usuario> opt = this.usuarioService.findById(id);
         if (opt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         Usuario usuario = this.usuarioService.atualizarImagem(opt.get(), foto);
         return ResponseEntity.ok(UsuarioRespostaDTO.converterParaDTO(usuario, tokenService.geradorDeToken(usuario)));
+    }
+
+    @PutMapping(value = "/usuario/alterar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UsuarioRespostaDTO> atualizarInformacoes(
+            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+            @RequestPart("usuario") UsuarioAlteracaoDTO dto,
+            @RequestPart(value = "foto", required = false) MultipartFile foto) {
+        Usuario u = this.usuarioService.atualizarInformacoes(dto, foto);
+        return ResponseEntity.ok(UsuarioRespostaDTO.converterParaDTO(u, this.tokenService.geradorDeToken(u)));
     }
 
 }
