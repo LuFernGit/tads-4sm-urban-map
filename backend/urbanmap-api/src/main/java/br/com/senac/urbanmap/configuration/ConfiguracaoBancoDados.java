@@ -30,7 +30,7 @@ public class ConfiguracaoBancoDados {
                         .nome("Administrador")
                         .nomeUsuario("Admin")
                         .fotoUrl("usuarios/padrao.png")
-                        .dataNascimento(LocalDate.now())
+                        .dataNascimento(LocalDate.of(2000, 1, 1))
                         .email("admin.urbanmap@gmail.com")
                         .senha(passwordEncoder.encode("admin1234"))
                         .funcao(Funcao.ADMINISTRADOR)

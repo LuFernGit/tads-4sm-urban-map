@@ -39,6 +39,8 @@ public class ConfiguracaoSeguranca {
                         .requestMatchers(HttpMethod.POST, "/cadastro", "/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/usuarios").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/adicionar/salvo/**", "/adicionar/like/**").hasRole(USER)
+                        .requestMatchers(HttpMethod.PUT, "/remover/salvo/**", "/remover/like/**").hasRole(USER)
                         .requestMatchers(HttpMethod.POST, "/tag").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.PUT, "/tag").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.DELETE, "/tag/**").hasRole(ADMIN)

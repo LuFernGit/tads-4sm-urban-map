@@ -47,7 +47,30 @@ public class UsuarioController {
         return ResponseEntity.ok(UsuarioRespostaDTO.converterParaDTO(usuario, tokenService.geradorDeToken(usuario)));
     }
 
-    // @PutMapping()
+    @PutMapping("/adicionar/salvo/{idUsuario}/{idLocal}")
+    public ResponseEntity<?> adicionarSalvo(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idLocal") Long idLocal) {
+        this.usuarioService.salvarLocal(idUsuario, idLocal);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/remover/salvo/{idUsuario}/{idLocal}")
+    public ResponseEntity<?> removerSalvo(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idLocal") Long idLocal) {
+        this.usuarioService.removerLocalSalvo(idUsuario, idLocal);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/adicionar/like/{idUsuario}/{idLocal}")
+    public ResponseEntity<?> adicionaLike(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idLocal") Long idLocal) {
+        this.usuarioService.darLike(idUsuario, idLocal);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/remover/like/{idUsuario}/{idLocal}")
+    public ResponseEntity<?> removerLike(@PathVariable("idUsuario") Long idUsuario, @PathVariable("idLocal") Long idLocal) {
+        this.usuarioService.removerLike(idUsuario, idLocal);
+        return ResponseEntity.ok().build();
+    }
+
 
     @PutMapping("/usuario/{id}/foto")
     public ResponseEntity<UsuarioRespostaDTO> atualizarFoto(@PathVariable Long id, @RequestParam("foto") MultipartFile foto) {
