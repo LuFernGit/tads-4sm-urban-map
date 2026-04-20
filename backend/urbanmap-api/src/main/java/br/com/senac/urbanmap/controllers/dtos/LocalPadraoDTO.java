@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-public record LocalCriadoDTO(
+public record LocalPadraoDTO(
         Long id,
         String nome,
         String descricao,
@@ -22,8 +22,8 @@ public record LocalCriadoDTO(
         Long qtdSalvo,
         Set<Tag> tags
 ) {
-    public static LocalCriadoDTO converterParaDto(Local local) {
-        return new LocalCriadoDTO(
+    public static LocalPadraoDTO converterParaDto(Local local) {
+        return new LocalPadraoDTO(
                 local.getId(),
                 local.getNome(),
                 local.getDescricao(),
@@ -38,5 +38,23 @@ public record LocalCriadoDTO(
                 local.getQtdSalvo(),
                 local.getTags()
         );
+    }
+
+    public static Local converterParaLocal(LocalPadraoDTO dto) {
+        return Local.builder()
+                .id(dto.id())
+                .nome(dto.nome())
+                .descricao(dto.descricao())
+                .fotosUrl(dto.fotosUrl())
+                .endereco(dto.endereco())
+                .cidade(dto.cidade())
+                .estado(dto.estado())
+                .cep(dto.cep())
+                .latitude(dto.latitude())
+                .longitude(dto.longitude())
+                .qtdLike(dto.qtdLike())
+                .qtdSalvo(dto.qtdSalvo())
+                .tags(dto.tags())
+                .build();
     }
 }

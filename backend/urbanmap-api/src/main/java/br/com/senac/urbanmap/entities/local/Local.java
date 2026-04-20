@@ -67,5 +67,5 @@ public class Local {
     @Setter Long qtdSalvo = 0L;
 
     @ManyToMany
-    private @Getter Set<Tag> tags = new HashSet<>();
+    private @Getter @Setter Set<Tag> tags = new HashSet<>();
 }
