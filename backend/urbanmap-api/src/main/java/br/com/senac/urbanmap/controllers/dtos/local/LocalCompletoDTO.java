@@ -1,5 +1,6 @@
-package br.com.senac.urbanmap.controllers.dtos;
+package br.com.senac.urbanmap.controllers.dtos.local;
 
+import br.com.senac.urbanmap.controllers.dtos.tag.TagDTO;
 import br.com.senac.urbanmap.entities.local.Local;
 import br.com.senac.urbanmap.entities.tag.Tag;
 
@@ -7,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-public record LocalPadraoDTO(
+public record LocalCompletoDTO(
         Long id,
         String nome,
         String descricao,
@@ -20,10 +21,10 @@ public record LocalPadraoDTO(
         BigDecimal longitude,
         Long qtdLike,
         Long qtdSalvo,
-        Set<Tag> tags
+        Set<TagDTO> tags
 ) {
-    public static LocalPadraoDTO converterParaDto(Local local) {
-        return new LocalPadraoDTO(
+    public static LocalCompletoDTO converterParaDto(Local local) {
+        return new LocalCompletoDTO(
                 local.getId(),
                 local.getNome(),
                 local.getDescricao(),
@@ -36,11 +37,11 @@ public record LocalPadraoDTO(
                 local.getLongitude(),
                 local.getQtdLike(),
                 local.getQtdSalvo(),
-                local.getTags()
+                TagDTO.converterParaListaDTO((local.getTags()))
         );
     }
 
-    public static Local converterParaLocal(LocalPadraoDTO dto) {
+    public static Local converterParaLocal(LocalCompletoDTO dto) {
         return Local.builder()
                 .id(dto.id())
                 .nome(dto.nome())
@@ -54,7 +55,7 @@ public record LocalPadraoDTO(
                 .longitude(dto.longitude())
                 .qtdLike(dto.qtdLike())
                 .qtdSalvo(dto.qtdSalvo())
-                .tags(dto.tags())
+                .tags(TagDTO.converterParaListaTag(dto.tags()))
                 .build();
     }
 }

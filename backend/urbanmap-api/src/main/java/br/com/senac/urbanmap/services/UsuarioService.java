@@ -1,9 +1,10 @@
 package br.com.senac.urbanmap.services;
 
-import br.com.senac.urbanmap.controllers.dtos.UsuarioAlteracaoDTO;
+import br.com.senac.urbanmap.controllers.dtos.usuario.UsuarioAlteracaoDTO;
+import br.com.senac.urbanmap.controllers.dtos.usuario.UsuarioResumidoDTO;
 import br.com.senac.urbanmap.entities.local.Local;
 import br.com.senac.urbanmap.entities.usuario.Usuario;
-import br.com.senac.urbanmap.controllers.dtos.UsuarioCadastroDTO;
+import br.com.senac.urbanmap.controllers.dtos.usuario.UsuarioCadastroDTO;
 import br.com.senac.urbanmap.exception.ErroServiceException;
 import br.com.senac.urbanmap.exception.ErroUsuarioServiceException;
 import br.com.senac.urbanmap.repositories.LocalRepository;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +35,9 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public List<UsuarioResumidoDTO> listarTodos() {
+        return new ArrayList<>(UsuarioResumidoDTO.conveterParaListaDTO(this.usuarioRepository.findAll()));
+    }
 
     public Usuario cadastrar(UsuarioCadastroDTO dto) throws ErroServiceException {
         if (emailCadastrado(dto)) {
@@ -184,10 +190,14 @@ public class UsuarioService {
     }
 
     private boolean nomeUsuarioCadastrado(UsuarioCadastroDTO dto) {
-        return usuarioRepository.existsBynomeUsuario(dto.nomeUsuario());
+        return usuarioRepository.existsByNomeUsuario(dto.nomeUsuario());
     }
 
     public Optional<Usuario> findById(Long id) {
         return this.usuarioRepository.findById(id);
+    }
+
+    public List<Usuario> findByNome(String nome) {
+        return this.usuarioRepository.findByNomeContainingIgnoreCase(nome);
     }
 }

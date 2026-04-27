@@ -66,6 +66,11 @@ public class Local {
     private @Getter
     @Setter Long qtdSalvo = 0L;
 
+    @Column(name = "_status")
+    private @Getter
+    @Setter boolean status = true;
+
     @ManyToMany
-    private @Getter @Setter Set<Tag> tags = new HashSet<>();
+    private @Getter
+    @Setter Set<Tag> tags = new HashSet<>();
 }

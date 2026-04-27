@@ -1,7 +1,8 @@
-package br.com.senac.urbanmap.controllers.dtos;
+package br.com.senac.urbanmap.controllers.dtos.usuario;
 
 import br.com.senac.urbanmap.entities.usuario.Funcao;
 import br.com.senac.urbanmap.entities.usuario.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -15,7 +16,7 @@ public record UsuarioCadastroDTO(
         @NotBlank(message = "Email é obrigatório") @Email(message = "Email inválido") String email,
         @NotBlank(message = "Senha é obrigatório") String senha,
         @NotBlank(message = "Telefone é obrigatório") @Size(max = 15) String telefone,
-        @NotNull(message = "Data de nascimento é obrigatório") LocalDate dataNascimento
+        @NotNull(message = "Data de nascimento é obrigatório") @JsonFormat(pattern = "dd/MM/yyyy") LocalDate dataNascimento
 ) {
     public static Usuario converterParaUsuario(UsuarioCadastroDTO dto, PasswordEncoder passwordEncoder) {
         return Usuario

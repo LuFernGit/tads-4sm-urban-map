@@ -1,4 +1,4 @@
-package br.com.senac.urbanmap.controllers.dtos;
+package br.com.senac.urbanmap.controllers.dtos.local;
 
 import br.com.senac.urbanmap.entities.local.Local;
 import br.com.senac.urbanmap.entities.tag.Tag;
@@ -11,13 +11,13 @@ import java.util.Set;
 
 public record LocalCadastroDTO(
         @NotBlank(message = "Nome é obrigatório") String nome,
-        @NotBlank(message = "Descrição é obrigatorio") String descricao,
+        @NotBlank(message = "Descrição é obrigatório") String descricao,
         @NotBlank(message = "Endereço é obrigatório") String endereco,
         @NotBlank(message = "Cidade é obrigatório") String cidade,
         @NotBlank(message = "Estado é obrigatório") String estado,
         @NotBlank(message = "Cep é obrigatório") String cep,
         @NotNull(message = "Latitude é obrigatório") BigDecimal latitude,
-        @NotNull(message = "Longitude é obrigatorio") BigDecimal longitude,
+        @NotNull(message = "Longitude é obrigatório") BigDecimal longitude,
         List<String> urls,
         Set<Long> tagsId
 ) {

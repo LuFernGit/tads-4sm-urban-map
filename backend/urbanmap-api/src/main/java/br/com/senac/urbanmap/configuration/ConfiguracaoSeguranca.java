@@ -25,7 +25,7 @@ public class ConfiguracaoSeguranca {
         this.securityFilter = securityFilter;
     }
 
-    // para acessar as fotos: http://localhost:5050/uploads/subpasta(usuarios/locais)/nome da foto.extensão
+    // para acessar as fotos: http://localhost (ou ip da maquina pessoal):5050/uploads/subpasta(usuarios/locais)/nome da foto.extensão
     // para acessar os endpoints de forma visual: http://localhost:5050/swagger-ui/index.html#
 
     @Bean
@@ -37,24 +37,25 @@ public class ConfiguracaoSeguranca {
                         // swagger, pastas de imagens, cadastro e login (não precisa de token)
                         .requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/cadastro", "/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/usuario/cadastro", "/usuario/login").permitAll()
                         // localController
-                        .requestMatchers(HttpMethod.GET, "/locais/todos", "/locais/buscar/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/locais/cadastrar").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/locais/alterar").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.DELETE, "/locais/deletar/**").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.GET, "/locais/lista", "/locais/buscar/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/locais/usuario/*/curtidos", "/locais/usuario/*/salvos").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/locais/admin/painel", "/locais/admin/estatistica/**").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.POST, "/locais/admin/cadastrar").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/locais/admin/alterar").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.DELETE, "/locais/admin/deletar/**").hasRole(ADMIN)
                         // tagController
-                        .requestMatchers(HttpMethod.GET, "/tag/todas").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/tag/admin/buscar").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/tag/admin/painel").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.POST, "/tag").hasRole(ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/tag").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/tag/**").hasRole(ADMIN)
                         .requestMatchers(HttpMethod.DELETE, "/tag/**").hasRole(ADMIN)
                         // usuarioController
-                        .requestMatchers(HttpMethod.PUT, "/adicionar/salvo/**", "/adicionar/like/**").hasRole(USER)
-                        .requestMatchers(HttpMethod.PUT, "/remover/salvo/**", "/remover/like/**").hasRole(USER)
-                        .requestMatchers(HttpMethod.PUT, "/usuario/*/foto").hasAnyRole(USER, ADMIN)
-                        .requestMatchers(HttpMethod.PUT, "/usuario/alterar").hasRole(USER)
+                        .requestMatchers(HttpMethod.GET, "/usuario/admin/**").hasRole(ADMIN)
+                        .requestMatchers(HttpMethod.PUT, "/usuario/adicionar/**", "/usuario/remover/**").hasRole(USER)
+                        .requestMatchers(HttpMethod.PUT, "/usuario/alterar", "/usuario/*/foto").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/usuario/*").hasAnyRole(USER, ADMIN)
-                        .requestMatchers(HttpMethod.GET, "/usuarios").hasRole(ADMIN)
                         // qualquer rota não mapeada
                         .anyRequest().authenticated()
                 )

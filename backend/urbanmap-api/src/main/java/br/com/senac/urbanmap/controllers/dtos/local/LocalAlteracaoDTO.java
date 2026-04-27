@@ -1,4 +1,4 @@
-package br.com.senac.urbanmap.controllers.dtos;
+package br.com.senac.urbanmap.controllers.dtos.local;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

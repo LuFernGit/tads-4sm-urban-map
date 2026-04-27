@@ -1,4 +1,4 @@
-package br.com.senac.urbanmap.controllers.dtos;
+package br.com.senac.urbanmap.controllers.dtos.tag;
 
 
 import br.com.senac.urbanmap.entities.tag.Tag;

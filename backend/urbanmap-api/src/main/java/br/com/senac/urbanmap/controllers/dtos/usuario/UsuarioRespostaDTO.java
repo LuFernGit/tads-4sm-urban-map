@@ -1,6 +1,7 @@
-package br.com.senac.urbanmap.controllers.dtos;
+package br.com.senac.urbanmap.controllers.dtos.usuario;
 
 import br.com.senac.urbanmap.entities.usuario.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ public record UsuarioRespostaDTO(
         String fotoUrl,
         String email,
         String telefone,
-        LocalDate dataNascimento,
+        @JsonFormat(pattern = "dd/MM/yyyy") LocalDate dataNascimento,
         Set<Long> likes,
         Set<Long> salvos,
         boolean Status,
