@@ -1,10 +1,18 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function Header() {
+  const { modoEscuro } = useContext(ThemeContext);
+
   return (
     <View style={styles.header}>
       <Image
-        source={require('../assets/logo.png')}
+        source={
+          modoEscuro
+            ? require("../assets/logo-dark.png")
+            : require("../assets/logo.png")
+        }
         style={styles.logo}
         resizeMode="contain"
       />

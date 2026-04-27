@@ -1,137 +1,126 @@
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Alert } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useState, useContext } from "react";
+
+import { usuariosMock } from "../../mock/UsuariosMock";
+
+import ProfileHeader from "../../components/ProfileHeader";
+import ProfileInfo from "../../components/ProfileInfo";
+import ProfileStats from "../../components/ProfileStats";
+import PrimaryButton from "../../components/PrimaryButton";
+import NavBar from "../../components/NavBar";
+import { ThemeContext } from "../../context/ThemeContext";
 
 export default function TelaPerfilUsuario() {
   const navigation = useNavigation();
+  const { colors } = useContext(ThemeContext);
+
+  const usuario = usuariosMock[1];
+
+  const [foto, setFoto] = useState(usuario.fotoPerfil);
+
+  const escolherImagem = async () => {
+    const permissao = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissao.granted) {
+      alert("Permissão necessária para acessar a galeria!");
+      return;
+    }
+
+    const resultado = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!resultado.canceled) {
+      setFoto({ uri: resultado.assets[0].uri });
+    }
+  };
+
+  const confirmarSaida = () => {
+    Alert.alert(
+      "Deseja sair?",
+      "Tem certeza que deseja sair da sua conta?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Sair",
+          onPress: () => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Login" }],
+            });
+          },
+          style: "destructive",
+        },
+      ]
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topBar}>
-        <Ionicons name="arrow-back" size={24} />
-        <Text style={styles.username}>_JuliaCostaa</Text>
-        <Ionicons name="settings-outline" size={22} />
-      </View>
-
-      <View style={styles.profileSection}>
-        <Image
-          source={require("../../assets/FotoUser/julia.jpeg")}
-          style={styles.avatar}
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.content}>
+        <ProfileHeader
+          username={usuario.usuario}
+          onSettingsPress={() => navigation.navigate("ConfigAcessibilidade")}
+          onBackPress={() => navigation.goBack()}
         />
 
-        <Text style={styles.name}>Julia Alves Costa</Text>
-        <Text style={styles.usernameLight}>_JuliaCostaa</Text>
+        <View style={styles.profileContainer}>
+          <TouchableOpacity onPress={escolherImagem}>
+            <ProfileInfo fotoPerfil={foto} name={usuario.nome} />
+          </TouchableOpacity>
 
-        <View style={styles.stats}>
-          <View>
-            <Text style={styles.statNumber}>24</Text>
-            <Text style={styles.statLabel}>Visitados</Text>
-          </View>
-          <View>
-            <Text style={styles.statNumber}>120</Text>
-            <Text style={styles.statLabel}>Curtidas</Text>
-          </View>
-          <View>
-            <Text style={styles.statNumber}>18</Text>
-            <Text style={styles.statLabel}>Salvos</Text>
-          </View>
+          <ProfileStats likes={120} saved={18} />
+
+          <PrimaryButton
+            title="Editar perfil"
+            onPress={() => navigation.navigate("EditarUsuario")}
+          />
         </View>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("EditarUsuario")}
-        >
-          <Text style={styles.buttonText}>Editar perfil</Text>
+        <TouchableOpacity style={styles.logout} onPress={confirmarSaida}>
+          <Text style={[styles.logoutText, { color: colors.error || "red" }]}>
+            Sair
+          </Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.logout}>
-        <Text>Sair</Text>
-      </TouchableOpacity>
-
-      <View style={styles.bottomNav}>
-        <Ionicons name="home-outline" size={24} />
-        <Ionicons name="heart-outline" size={24} />
-        <Ionicons name="bookmark-outline" size={24} />
-        <Ionicons name="person-circle" size={24} />
-      </View>
+      <NavBar />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-
-  topBar: {
-    marginTop: 50,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
+  container: {
+    flex: 1,
   },
 
-  username: { fontWeight: "500" },
+  content: {
+    flex: 1,
+  },
 
-  profileSection: {
+  profileContainer: {
     alignItems: "center",
+    gap: 12,
     marginTop: 20,
-  },
-
-  avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-  },
-
-  name: {
-    fontSize: 18,
-    marginTop: 10,
-  },
-
-  usernameLight: {
-    color: "#777",
-    marginBottom: 10,
-  },
-
-  stats: {
-    flexDirection: "row",
-    gap: 30,
-    marginVertical: 15,
-  },
-
-  statNumber: {
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-
-  statLabel: {
-    fontSize: 12,
-    textAlign: "center",
-  },
-
-  button: {
-    backgroundColor: "#000",
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 8,
-  },
-
-  buttonText: {
-    color: "#fff",
   },
 
   logout: {
+    alignItems: "center",
+    paddingHorizontal: 50,
     marginTop: 20,
-    marginLeft: 20,
+    marginBottom: 80,
   },
 
-  bottomNav: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 14,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
+  logoutText: {
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

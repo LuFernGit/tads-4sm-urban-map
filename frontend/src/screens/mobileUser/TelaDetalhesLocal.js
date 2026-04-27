@@ -1,21 +1,21 @@
-import { useEffect, useState, useContext, useRef } from "react";
-import { ScrollView, StyleSheet, View, Text } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useContext, useEffect, useRef, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import HeaderDetalhes from "../../components/HeaderDetalhes";
-import CardDetalhes from "../../components/CardDetalhes";
-import NavBar from "../../components/NavBar";
 import BottomSheetComentarios from "../../components/BottomSheetComentarios";
+import CardDetalhes from "../../components/CardDetalhes";
+import HeaderDetalhes from "../../components/HeaderDetails";
+import NavBar from "../../components/NavBar";
 
+import { ThemeContext } from "../../context/ThemeContext";
 import { comentariosMock } from "../../mock/ComentariosMock";
-import { ConfigContext } from "../../context/ConfigContext";
-import { themes } from "../../theme/theme";
 
 export default function TelaDetalhesLocal() {
   const [comentarios, setComentarios] = useState([]);
   const [localSelecionado, setLocalSelecionado] = useState(null);
 
-  const { theme } = useContext(ConfigContext);
+  const { colors } = useContext(ThemeContext);
+
   const navigation = useNavigation();
   const route = useRoute();
 
@@ -44,7 +44,7 @@ export default function TelaDetalhesLocal() {
   };
 
   const comentariosFiltrados = comentarios.filter(
-    (c) => c.localId === localSelecionado?.id
+    (c) => c.localId === localSelecionado?.id,
   );
 
   if (!localSelecionado) {
@@ -56,13 +56,7 @@ export default function TelaDetalhesLocal() {
   }
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: themes[theme].backgroundColor },
-      ]}
-    >
-
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
         <HeaderDetalhes
           title={localSelecionado.nome}
@@ -71,12 +65,10 @@ export default function TelaDetalhesLocal() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
-
         <CardDetalhes
           lugar={localSelecionado}
           onComentarioPress={() => abrirComentarios(localSelecionado)}
         />
-
       </ScrollView>
 
       <NavBar />

@@ -1,11 +1,17 @@
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function AuthFooter({ onPress }) {
+  const { colors } = useContext(ThemeContext);
+
   return (
     <TouchableOpacity onPress={onPress} style={styles.footer}>
-      <Text>
+      <Text style={{ color: colors.text }}>
         Não tem uma conta?{" "}
-        <Text style={styles.link}>Cadastre-se agora.</Text>
+        <Text style={[styles.link, { color: "#38B6FF" }]}>
+          Cadastre-se agora.
+        </Text>
       </Text>
     </TouchableOpacity>
   );
@@ -16,9 +22,7 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
   link: {
-    color: "#38B6FF",
-    fontStyle:"italic",
-    fontWeight:"900",
+    fontStyle: "italic",
+    fontWeight: "900",
   },
-  
 });

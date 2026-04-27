@@ -1,26 +1,35 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
 
 export default function TelaCadastroSucesso({ navigation }) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      });
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image
-        source={require('../../assets/sucesso.png')}
+        source={require("../../assets/sucesso.png")}
         style={styles.imagemSucesso}
         resizeMode="contain"
       />
 
       <Text style={styles.title}>Cadastro realizado</Text>
+
       <Text style={styles.subtitle}>
         Seu cadastro foi realizado com sucesso
       </Text>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Login')}
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+      <Text style={styles.info}>
+        Você será redirecionado automaticamente...
+      </Text>
     </View>
   );
 }
@@ -28,38 +37,35 @@ export default function TelaCadastroSucesso({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#dff3ff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 25,
   },
+
   imagemSucesso: {
-    width: 200,
-    height: 200,
+    width: 180,
+    height: 180,
     marginBottom: 20,
   },
+
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#1e232c',
+    fontSize: 26,
+    fontWeight: "bold",
+    color: "#1e232c",
     marginBottom: 10,
   },
+
   subtitle: {
-    fontSize: 16,
-    color: '#444',
-    textAlign: 'center',
-    marginBottom: 30,
+    fontSize: 15,
+    color: "#444",
+    textAlign: "center",
+    marginBottom: 10,
   },
-  button: {
-    width: '100%',
-    backgroundColor: '#1e232c',
-    padding: 16,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 16,
+
+  info: {
+    fontSize: 13,
+    color: "#666",
+    marginTop: 10,
   },
 });

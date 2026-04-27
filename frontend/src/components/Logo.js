@@ -1,9 +1,17 @@
 import { Image, StyleSheet } from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function Logo() {
+  const { modoEscuro } = useContext(ThemeContext);
+
   return (
     <Image
-      source={require("../assets/logo.png")}
+      source={
+        modoEscuro
+          ? require("../assets/logo-dark.png")
+          : require("../assets/logo.png")
+      }
       style={styles.logo}
       resizeMode="contain"
     />

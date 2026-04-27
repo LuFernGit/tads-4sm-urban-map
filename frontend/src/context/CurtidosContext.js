@@ -5,8 +5,8 @@ export const CurtidosContext = createContext();
 export function CurtidosProvider({ children }) {
   const [curtidos, setCurtidos] = useState([]);
 
-  const toggleCurtidos = (lugar) => {
-    const existe = curtidos.find((item) => item.id === lugar.id);
+  const toggleCurtido = (lugar) => {
+    const existe = curtidos.some((item) => item.id === lugar.id);
 
     if (existe) {
       setCurtidos(curtidos.filter((item) => item.id !== lugar.id));
@@ -15,8 +15,12 @@ export function CurtidosProvider({ children }) {
     }
   };
 
+  const isCurtido = (id) => {
+    return curtidos.some((item) => item.id === id);
+  };
+
   return (
-    <CurtidosContext.Provider value={{ curtidos, toggleCurtidos }}>
+    <CurtidosContext.Provider value={{ curtidos, toggleCurtido, isCurtido }}>
       {children}
     </CurtidosContext.Provider>
   );

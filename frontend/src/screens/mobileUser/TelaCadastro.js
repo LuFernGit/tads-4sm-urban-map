@@ -19,7 +19,32 @@ export default function TelaCadastro({ navigation }) {
   const [errors, setErrors] = useState({});
 
   const handleChange = (field, value) => {
-    setForm({ ...form, [field]: value });
+    setForm((prev) => ({ ...prev, [field]: value }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: false,
+    }));
+  };
+
+  const formatDate = (text) => {
+    const cleaned = text.replace(/\D/g, "").slice(0, 8);
+
+    let formatted = cleaned;
+
+    if (cleaned.length > 2) {
+      formatted = cleaned.slice(0, 2) + "/" + cleaned.slice(2);
+    }
+    if (cleaned.length > 4) {
+      formatted =
+        cleaned.slice(0, 2) +
+        "/" +
+        cleaned.slice(2, 4) +
+        "/" +
+        cleaned.slice(4);
+    }
+
+    return formatted;
   };
 
   const validar = () => {
@@ -31,7 +56,10 @@ export default function TelaCadastro({ navigation }) {
     if (!form.nascimento) novosErros.nascimento = true;
     if (!form.usuario) novosErros.usuario = true;
     if (!form.senha) novosErros.senha = true;
-    if (form.senha !== form.confirmarSenha) novosErros.confirmarSenha = true;
+
+    if (form.senha !== form.confirmarSenha) {
+      novosErros.confirmarSenha = true;
+    }
 
     setErrors(novosErros);
 
@@ -46,11 +74,11 @@ export default function TelaCadastro({ navigation }) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* HEADER */}
+
       <View style={styles.header}>
         <Ionicons
           name="chevron-back"
-          size={30}
+          size={28}
           color="#1e232c"
           onPress={() => navigation.goBack()}
         />
@@ -86,7 +114,10 @@ export default function TelaCadastro({ navigation }) {
       <InputField
         placeholder="Data de nascimento"
         value={form.nascimento}
-        onChangeText={(v) => handleChange("nascimento", v)}
+        onChangeText={(v) =>
+          handleChange("nascimento", formatDate(v))
+        }
+        keyboardType="numeric"
         error={errors.nascimento}
       />
 
@@ -108,7 +139,9 @@ export default function TelaCadastro({ navigation }) {
       <InputField
         placeholder="Confirme sua senha"
         value={form.confirmarSenha}
-        onChangeText={(v) => handleChange("confirmarSenha", v)}
+        onChangeText={(v) =>
+          handleChange("confirmarSenha", v)
+        }
         secureTextEntry
         error={errors.confirmarSenha}
       />
@@ -120,23 +153,24 @@ export default function TelaCadastro({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    paddingTop: 50,
+    paddingTop: 30,
+    paddingBottom: 40,
   },
 
   header: {
     width: "100%",
-    alignItems: "flex-start",
+    paddingLeft: 15,
     marginBottom: 10,
-    padding: 10,
   },
 
   title: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "bold",
     color: "#1e232c",
-    marginBottom: 30,
+    marginBottom: 25,
+    textAlign: "left",
   },
 });

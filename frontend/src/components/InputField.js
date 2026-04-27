@@ -1,41 +1,76 @@
-import { useState } from "react";
-import { TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
+import { useState, useContext } from "react";
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function InputField({
-  placeholder,
+  label,
   value,
-  onChangeText,
+  editable = true,
+  placeholder,
   secureTextEntry,
-  error,
   keyboardType,
+  onChangeText,
+  error,
 }) {
   const [hidePassword, setHidePassword] = useState(secureTextEntry);
 
-  return (
-    <View style={[styles.container, error && styles.errorBorder]}>
-      <TextInput
-        placeholder={placeholder}
-        placeholderTextColor="#999"
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={hidePassword}
-        keyboardType={keyboardType}
-        style={styles.input}
-      />
+  const { colors } = useContext(ThemeContext);
 
-      {secureTextEntry && (
-        <TouchableOpacity
-          onPress={() => setHidePassword(!hidePassword)}
-          style={styles.icon}
-        >
-          <Ionicons
-            name={hidePassword ? "eye-off" : "eye"}
-            size={20}
-            color="#9f9f9f"
-          />
-        </TouchableOpacity>
+  return (
+    <View style={{ width: "100%", alignItems: "center" }}>
+
+      {label && (
+        <Text style={[styles.label, { color: colors.text }]}>
+          {label}
+        </Text>
       )}
+
+      <View
+        style={[
+          styles.container,
+          {
+            backgroundColor: colors.card,
+            borderColor: error ? "red" : colors.text + "30",
+          },
+          !editable && styles.containerDisabled,
+        ]}
+      >
+        <TextInput
+          style={[
+            styles.input,
+            { color: colors.text },
+            !editable && styles.inputDisabled,
+          ]}
+          value={value}
+          editable={editable}
+          placeholder={placeholder}
+          placeholderTextColor={colors.text + "70"}
+          secureTextEntry={hidePassword}
+          keyboardType={keyboardType}
+          onChangeText={onChangeText}
+        />
+
+        {secureTextEntry && (
+          <TouchableOpacity
+            onPress={() => setHidePassword(!hidePassword)}
+            style={styles.icon}
+          >
+            <Ionicons
+              name={hidePassword ? "eye-off" : "eye"}
+              size={20}
+              color={colors.text}
+            />
+          </TouchableOpacity>
+        )}
+      </View>
+
     </View>
   );
 }
@@ -45,10 +80,8 @@ const styles = StyleSheet.create({
     width: "80%",
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#f0f1f2",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#DADADA",
     paddingHorizontal: 10,
     marginBottom: 15,
   },
@@ -56,14 +89,23 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     padding: 15,
-    color: "#000",
+  },
+
+  inputDisabled: {
+    color: "#999",
   },
 
   icon: {
     padding: 5,
   },
 
-  errorBorder: {
-    borderColor: "red",
+  label: {
+    width: "80%",
+    marginBottom: 5,
+    fontSize: 14,
+  },
+
+  containerDisabled: {
+    opacity: 0.6,
   },
 });

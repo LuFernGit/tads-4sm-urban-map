@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import { ThemeContext } from "../context/ThemeContext";
 
 export default function Filtro({
   label,
@@ -9,6 +10,7 @@ export default function Filtro({
   setSelecionados,
 }) {
   const [aberto, setAberto] = useState(false);
+  const { colors } = useContext(ThemeContext);
 
   const toggle = () => setAberto((prev) => !prev);
 
@@ -34,13 +36,22 @@ export default function Filtro({
 
   return (
     <View>
-      <TouchableOpacity onPress={toggle} style={styles.item}>
-        <Text style={styles.label}>{label}</Text>
+
+      <TouchableOpacity
+        onPress={toggle}
+        style={[
+          styles.item,
+          { borderColor: colors.text + "30" },
+        ]}
+      >
+        <Text style={[styles.label, { color: colors.text }]}>
+          {label}
+        </Text>
 
         <Entypo
           name={aberto ? "minus" : "plus"}
           size={18}
-          color="#000"
+          color={colors.text}
         />
       </TouchableOpacity>
 
@@ -55,16 +66,25 @@ export default function Filtro({
               <Ionicons
                 name={ativo(opcao) ? "checkbox" : "square-outline"}
                 size={20}
-                color={ativo(opcao) ? "#000" : "#000000"}
+                color={colors.text}
               />
 
-              <Text style={[styles.texto, ativo(opcao) && styles.textoAtivo]}>
+              <Text
+                style={[
+                  styles.texto,
+                  {
+                    color: colors.text,
+                    fontWeight: ativo(opcao) ? "600" : "400",
+                  },
+                ]}
+              >
                 {opcao}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
       )}
+
     </View>
   );
 }
@@ -75,7 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderColor: "#ddd",
   },
 
   label: {
@@ -96,10 +115,5 @@ const styles = StyleSheet.create({
 
   texto: {
     fontSize: 14,
-    color: "#333",
-  },
-
-  textoAtivo: {
-    fontWeight: "600",
   },
 });

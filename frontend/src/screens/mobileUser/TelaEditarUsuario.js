@@ -1,86 +1,125 @@
-import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+
+import { usuariosMock } from "../../mock/UsuariosMock";
+
+import ProfileHeader from "../../components/ProfileHeader";
+import InputField from "../../components/InputField";
+import NavBar from "../../components/NavBar";
 
 export default function TelaEditarUsuario() {
   const navigation = useNavigation();
 
+  const userData = usuariosMock[1];
+
+  const [nome, setNome] = useState(userData.nome);
+  const [user, setUser] = useState(userData.usuario);
+  const [email] = useState(userData.email);
+  const [telefone, setTelefone] = useState(userData.telefone);
+  const [data, setData] = useState(userData.nascimento);
+
+  // 📸 foto do usuário
+  const [foto, setFoto] = useState(userData.fotoPerfil);
+
+  // 📸 escolher imagem
+  const escolherImagem = async () => {
+    const permissao = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissao.granted) {
+      alert("Permissão necessária para acessar a galeria!");
+      return;
+    }
+
+    const resultado = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!resultado.canceled) {
+      setFoto({ uri: resultado.assets[0].uri });
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Editar perfil</Text>
-
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.save}>Salvar</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.avatarSection}>
-        <Image
-          source={require("../../assets/FotoUser/julia.jpeg")}
-          style={styles.avatar}
-        />
-        <Text style={styles.changePhoto}>Alterar foto</Text>
-      </View>
-
-      <View style={styles.form}>
-        <Text>Nome completo</Text>
-        <TextInput style={styles.input} value="Julia Alves Costa" />
-
-        <Text>Usuário</Text>
-        <TextInput style={styles.input} value="_JuliaCostaa" />
-
-        <Text>Email</Text>
-        <TextInput
-          style={styles.inputDisabled}
-          value="juliaCostaa26@gmail.com"
-          editable={false}
+      <View style={styles.content}>
+        
+        <ProfileHeader
+          title="Editar perfil"
+          onBack={() => navigation.goBack()}
+          rightText="Salvar"
+          onRightPress={() => navigation.goBack()}
         />
 
-        <Text>Telefone</Text>
-        <TextInput style={styles.input} value="(11) 95432-8890" />
+        {/* FOTO */}
+        <View style={styles.avatarSection}>
+          <TouchableOpacity onPress={escolherImagem}>
+            <Image
+              source={foto}
+              style={styles.avatar}
+            />
+          </TouchableOpacity>
 
-        <Text>Data de nascimento</Text>
-        <TextInput style={styles.input} placeholder="dd/mm/aaaa" />
+          <TouchableOpacity onPress={escolherImagem}>
+            <Text style={styles.changePhoto}>Alterar foto</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* FORM */}
+        <View style={styles.form}>
+          <InputField
+            label="Nome completo"
+            value={nome}
+            onChangeText={setNome}
+          />
+
+          <InputField
+            label="Usuário"
+            value={user}
+            onChangeText={setUser}
+          />
+
+          <InputField
+            label="Email"
+            value={email}
+            editable={false}
+          />
+
+          <InputField
+            label="Telefone"
+            value={telefone}
+            onChangeText={setTelefone}
+            keyboardType="phone-pad"
+          />
+
+          <InputField
+            label="Data de nascimento"
+            value={data}
+            onChangeText={setData}
+            placeholder="dd/mm/aaaa"
+            keyboardType="numeric"
+          />
+        </View>
+
       </View>
 
-      <View style={styles.bottomNav}>
-        <Ionicons name="home-outline" size={24} />
-        <Ionicons name="heart-outline" size={24} />
-        <Ionicons name="bookmark-outline" size={24} />
-        <Ionicons name="person-circle" size={24} />
-      </View>
+      <NavBar />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-
-  topBar: {
-    marginTop: 50,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
 
-  title: { fontSize: 16 },
-
-  save: {
-    color: "#3aaefc",
-    fontWeight: "500",
+  content: {
+    flex: 1,
   },
 
   avatarSection: {
@@ -89,9 +128,9 @@ const styles = StyleSheet.create({
   },
 
   avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
 
   changePhoto: {
@@ -100,34 +139,8 @@ const styles = StyleSheet.create({
   },
 
   form: {
-    padding: 16,
-  },
-
-  input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-  },
-
-  inputDisabled: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: "#eee",
-  },
-
-  bottomNav: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 14,
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
+    alignItems: "center",
+    marginTop: 20,
+    gap: 10,
   },
 });

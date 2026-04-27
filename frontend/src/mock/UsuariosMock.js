@@ -11,7 +11,7 @@ export const usuariosMock = [
   {
     id: 2,
     nome: "Julia Alves Costa",
-    usuario: "JuliaCostaa26",
+    usuario: "_JuliaCostaa26",
     email: "JuliaCostaa26@gmail.com",
     telefone: "(11) 95432-8890",
     nascimento: "1979-09-22",

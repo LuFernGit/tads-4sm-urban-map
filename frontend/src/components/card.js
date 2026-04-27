@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -11,29 +11,36 @@ import {
 } from "react-native";
 
 import { SalvosContext } from "../context/SalvosContext";
+import { ThemeContext } from "../context/ThemeContext";
+import { CurtidosContext } from "../context/CurtidosContext";
 
 const { width } = Dimensions.get("window");
 
 export default function Card({ lugar, onComentarioPress, onPress }) {
-  const [curtido, setCurtido] = useState(false);
   const [indexAtivo, setIndexAtivo] = useState(0);
 
   const { salvos, toggleSalvo } = useContext(SalvosContext);
+  const { colors, modoEscuro } = useContext(ThemeContext);
+
+  const { toggleCurtido, isCurtido } = useContext(CurtidosContext);
+
+  const curtido = isCurtido(lugar.id);
   const salvo = salvos.some((item) => item.id === lugar.id);
 
   const abrirMapa = (nome) => {
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(nome)}`;
+    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      nome
+    )}`;
     Linking.openURL(url);
   };
 
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, { backgroundColor: colors.background }]}>
+      <Text style={[styles.locationTitle, { color: colors.text }]}>
+        {lugar?.nome}
+      </Text>
 
-      {/* NOME */}
-      <Text style={styles.locationTitle}>{lugar.nome}</Text>
-
-      {/* CARROSSEL */}
-      {lugar.fotosUrl?.length > 0 && (
+      {lugar?.fotosUrl?.length > 0 && (
         <ScrollView
           horizontal
           pagingEnabled
@@ -48,8 +55,7 @@ export default function Card({ lugar, onComentarioPress, onPress }) {
           }}
         >
           {lugar.fotosUrl.map((img, index) => {
-            const ImageComponent =
-              index === 0 ? TouchableOpacity : View;
+            const ImageComponent = index === 0 ? TouchableOpacity : View;
 
             return (
               <ImageComponent
@@ -65,29 +71,34 @@ export default function Card({ lugar, onComentarioPress, onPress }) {
         </ScrollView>
       )}
 
-      {/* DOTS */}
-      {lugar.fotosUrl?.length > 1 && (
+      {lugar?.fotosUrl?.length > 1 && (
         <View style={styles.dotsContainer}>
           {lugar.fotosUrl.map((_, i) => (
             <View
               key={i}
               style={[
                 styles.dot,
-                indexAtivo === i && styles.dotActive,
+                {
+                  backgroundColor:
+                    indexAtivo === i ? colors.text : "#999",
+                },
               ]}
             />
           ))}
         </View>
       )}
 
-      {/* AÇÕES */}
       <View style={styles.actionsRow}>
         <View style={styles.leftActions}>
-          <TouchableOpacity onPress={() => setCurtido(!curtido)}>
+          <TouchableOpacity onPress={() => toggleCurtido(lugar)}>
             <Image
               source={
                 curtido
-                  ? require("../assets/BotaoLikeFilled.png")
+                  ? modoEscuro
+                    ? require("../assets/BotaoLikeFilled-dark.png")
+                    : require("../assets/BotaoLikeFilled.png")
+                  : modoEscuro
+                  ? require("../assets/BotaoLike-dark.png")
                   : require("../assets/BotaoLike.png")
               }
               style={styles.icon}
@@ -96,14 +107,22 @@ export default function Card({ lugar, onComentarioPress, onPress }) {
 
           <TouchableOpacity onPress={() => onComentarioPress?.(lugar)}>
             <Image
-              source={require("../assets/BotaoComentario.png")}
+              source={
+                modoEscuro
+                  ? require("../assets/BotaoComentario-dark.png")
+                  : require("../assets/BotaoComentario.png")
+              }
               style={styles.icon}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => abrirMapa(lugar.nome)}>
+          <TouchableOpacity onPress={() => abrirMapa(lugar?.nome)}>
             <Image
-              source={require("../assets/BotaoGoogleMaps.png")}
+              source={
+                modoEscuro
+                  ? require("../assets/BotaoGoogleMaps-dark.png")
+                  : require("../assets/BotaoGoogleMaps.png")
+              }
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -113,7 +132,11 @@ export default function Card({ lugar, onComentarioPress, onPress }) {
           <Image
             source={
               salvo
-                ? require("../assets/BotaoSalvoFilled.png")
+                ? modoEscuro
+                  ? require("../assets/BotaoSalvoFilled-dark.png")
+                  : require("../assets/BotaoSalvoFilled.png")
+                : modoEscuro
+                ? require("../assets/BotaoSalvo-dark.png")
                 : require("../assets/BotaoSalvo.png")
             }
             style={styles.icon}
@@ -121,15 +144,21 @@ export default function Card({ lugar, onComentarioPress, onPress }) {
         </TouchableOpacity>
       </View>
 
-      {/* INFOS */}
-      <Text style={styles.likes}>{lugar.qtdLike} curtidas</Text>
+      <Text style={[styles.likes, { color: colors.text }]}>
+        {lugar?.qtdLike ?? 0} curtidas
+      </Text>
 
-      <Text style={styles.tags}>
-        {lugar.tags?.map((tag) => `#${tag.nome}`).join(" ")}
+      <Text style={[styles.tags, { color: colors.text }]}>
+        {(lugar?.tags || [])
+          .map((tag) => tag?.nome)
+          .filter(Boolean)
+          .map((nome) => `#${nome}`)
+          .join(" ")}
       </Text>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   card: {
     marginBottom: 20,
@@ -170,7 +199,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     fontSize: 13,
     marginBottom: 20,
-    color: "#222",
   },
 
   icon: {
@@ -189,13 +217,6 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 10,
-    backgroundColor: "#ccc",
     marginHorizontal: 3,
-  },
-
-  dotActive: {
-    backgroundColor: "#333",
-    width: 8,
-    height: 8,
   },
 });

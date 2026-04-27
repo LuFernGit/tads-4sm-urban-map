@@ -11,26 +11,31 @@ import {
 } from "react-native";
 
 import { SalvosContext } from "../context/SalvosContext";
+import { ThemeContext } from "../context/ThemeContext";
+import { CurtidosContext } from "../context/CurtidosContext";
 
 const { width } = Dimensions.get("window");
 
 export default function CardDetalhes({ lugar, onComentarioPress }) {
-  const [curtido, setCurtido] = useState(false);
   const [indexAtivo, setIndexAtivo] = useState(0);
 
   const { salvos, toggleSalvo } = useContext(SalvosContext);
+  const { colors, modoEscuro } = useContext(ThemeContext);
+
+  const { toggleCurtido, isCurtido } = useContext(CurtidosContext);
+
+  const curtido = isCurtido(lugar.id);
   const salvo = salvos.some((item) => item.id === lugar.id);
 
   const abrirMapa = (nome) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-      nome,
+      nome
     )}`;
     Linking.openURL(url);
   };
 
   return (
-    <View style={styles.card}>
-      {/* CARROSSEL */}
+    <View style={[styles.card, { backgroundColor: colors.background }]}>
       <ScrollView
         horizontal
         pagingEnabled
@@ -38,7 +43,9 @@ export default function CardDetalhes({ lugar, onComentarioPress }) {
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         onMomentumScrollEnd={(event) => {
-          const slide = Math.round(event.nativeEvent.contentOffset.x / width);
+          const slide = Math.round(
+            event.nativeEvent.contentOffset.x / width
+          );
           setIndexAtivo(slide);
         }}
       >
@@ -49,26 +56,34 @@ export default function CardDetalhes({ lugar, onComentarioPress }) {
         ))}
       </ScrollView>
 
-      {/* DOTS */}
       {lugar.fotosUrl?.length > 1 && (
         <View style={styles.dotsContainer}>
           {lugar.fotosUrl.map((_, i) => (
             <View
               key={i}
-              style={[styles.dot, indexAtivo === i && styles.dotActive]}
+              style={[
+                styles.dot,
+                {
+                  backgroundColor:
+                    indexAtivo === i ? colors.text : "#999",
+                },
+              ]}
             />
           ))}
         </View>
       )}
 
-      {/* AÇÕES */}
       <View style={styles.actionsRow}>
         <View style={styles.leftActions}>
-          <TouchableOpacity onPress={() => setCurtido(!curtido)}>
+          <TouchableOpacity onPress={() => toggleCurtido(lugar)}>
             <Image
               source={
                 curtido
-                  ? require("../assets/BotaoLikeFilled.png")
+                  ? modoEscuro
+                    ? require("../assets/BotaoLikeFilled-dark.png")
+                    : require("../assets/BotaoLikeFilled.png")
+                  : modoEscuro
+                  ? require("../assets/BotaoLike-dark.png")
                   : require("../assets/BotaoLike.png")
               }
               style={styles.icon}
@@ -77,14 +92,22 @@ export default function CardDetalhes({ lugar, onComentarioPress }) {
 
           <TouchableOpacity onPress={() => onComentarioPress?.(lugar)}>
             <Image
-              source={require("../assets/BotaoComentario.png")}
+              source={
+                modoEscuro
+                  ? require("../assets/BotaoComentario-dark.png")
+                  : require("../assets/BotaoComentario.png")
+              }
               style={styles.icon}
             />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => abrirMapa(lugar.nome)}>
             <Image
-              source={require("../assets/BotaoGoogleMaps.png")}
+              source={
+                modoEscuro
+                  ? require("../assets/BotaoGoogleMaps-dark.png")
+                  : require("../assets/BotaoGoogleMaps.png")
+              }
               style={styles.icon}
             />
           </TouchableOpacity>
@@ -94,7 +117,11 @@ export default function CardDetalhes({ lugar, onComentarioPress }) {
           <Image
             source={
               salvo
-                ? require("../assets/BotaoSalvoFilled.png")
+                ? modoEscuro
+                  ? require("../assets/BotaoSalvoFilled-dark.png")
+                  : require("../assets/BotaoSalvoFilled.png")
+                : modoEscuro
+                ? require("../assets/BotaoSalvo-dark.png")
                 : require("../assets/BotaoSalvo.png")
             }
             style={styles.icon}
@@ -102,14 +129,25 @@ export default function CardDetalhes({ lugar, onComentarioPress }) {
         </TouchableOpacity>
       </View>
 
-      <Text style={styles.likes}>{lugar.qtdLike} curtidas</Text>
-
-      <Text style={styles.tags}>
-        {lugar.tags?.map((tag) => `#${tag.nome}`).join(" ")}
+      <Text style={[styles.likes, { color: colors.text }]}>
+        {lugar.qtdLike} curtidas
       </Text>
 
-      <Text style={styles.tituloDescricao}>Descrição:</Text>
-      <Text style={styles.descricao}>{lugar.descricao}</Text>
+      <Text style={[styles.tags, { color: colors.text }]}>
+        {(lugar.tags || [])
+          .map((tag) => tag?.nome)
+          .filter(Boolean)
+          .map((nome) => `#${nome}`)
+          .join(" ")}
+      </Text>
+
+      <Text style={[styles.tituloDescricao, { color: colors.text }]}>
+        Descrição:
+      </Text>
+
+      <Text style={[styles.descricao, { color: colors.text }]}>
+        {lugar.descricao}
+      </Text>
     </View>
   );
 }
@@ -153,21 +191,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     fontSize: 13,
     marginBottom: 10,
-    color: "#222",
   },
 
   descricao: {
     marginHorizontal: 16,
     fontSize: 14,
-    color: "#555",
     marginBottom: 20,
   },
-  
+
   tituloDescricao: {
     marginHorizontal: 16,
     fontSize: 15,
     fontWeight: "600",
-    color: "#000",
     marginBottom: 4,
   },
 
@@ -181,13 +216,6 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 10,
-    backgroundColor: "#ccc",
     marginHorizontal: 3,
-  },
-
-  dotActive: {
-    backgroundColor: "#333",
-    width: 8,
-    height: 8,
   },
 });
