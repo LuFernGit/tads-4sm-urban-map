@@ -56,6 +56,9 @@ public class ConfiguracaoSeguranca {
                         .requestMatchers(HttpMethod.PUT, "/usuario/adicionar/**", "/usuario/remover/**").hasRole(USER)
                         .requestMatchers(HttpMethod.PUT, "/usuario/alterar", "/usuario/*/foto").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/usuario/*").hasAnyRole(USER, ADMIN)
+                        // comentarioController
+                        .requestMatchers(HttpMethod.GET, "/comentarios/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/comentarios/cadastro").hasRole(USER)
                         // qualquer rota não mapeada
                         .anyRequest().authenticated()
                 )

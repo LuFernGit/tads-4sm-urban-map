@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -30,5 +31,5 @@ public class Comentario {
 
     @Column(name = "data_criacao", nullable = false, updatable = false)
     private @Getter
-    @Setter LocalDate dataCriacao = LocalDate.now();
+    @Setter LocalDateTime dataCriacao = LocalDateTime.now();
 }
