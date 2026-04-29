@@ -13,6 +13,7 @@ import TelaLoginWebAdm from "./telas/TelaLoginWebAdm"
 import TelaCadastroAdm from "./telas/TelaCadastroAdm";
 import TelaDashboardAdmWeb from "./telas/TelaDashboardAdmWeb";
 import TelaGerenciarLocaisWeb from "./telas/TelaGerenciarLocaisWeb";
+import TelaGerenciarUsuarioWeb from "./telas/TelaGerenciarUsuarioWeb";
 
 
 const Stack = createNativeStackNavigator();
@@ -22,7 +23,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="TelaGerenciarLocaisWeb"
+          initialRouteName="TelaGerenciarUsuarioWeb"
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="Principal" component={TelaPrincipal} />
@@ -35,6 +36,7 @@ export default function App() {
           <Stack.Screen name="TelaCadastroAdm" component={TelaCadastroAdm}/>
           <Stack.Screen name="TelaDashboardAdmWeb" component={TelaDashboardAdmWeb}/>
           <Stack.Screen name="TelaGerenciarLocaisWeb" component={TelaGerenciarLocaisWeb}/>
+          <Stack.Screen name="TelaGerenciarUsuarioWeb" component={TelaGerenciarUsuarioWeb}/>
 
 
         </Stack.Navigator>
